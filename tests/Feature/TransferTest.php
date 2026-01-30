@@ -17,11 +17,9 @@ class TransferTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // TODO: Remove after testing
         $this->artisan('migrate');
     }
 
-    // NOTE: Generate transaction_id
     public function generateTransactionId(): string
     {
         return 'TRF-'.date('Y').'-TC-'.str_pad(rand(1, 999999999), 9, '0', STR_PAD_LEFT);
@@ -72,7 +70,6 @@ class TransferTest extends TestCase
     /** @test */
     public function it_can_perform_an_online_transfer_with_fallback()
     {
-        // Mock BankClientRegistry for validation purposes
         $bankClientRegistryMock = Mockery::mock(BankClientRegistry::class);
         $bankClientRegistryMock->shouldReceive('getBankCodes')->andReturn(['A01', 'B02', 'C03']);
         $this->app->instance(BankClientRegistry::class, $bankClientRegistryMock);
@@ -120,7 +117,6 @@ class TransferTest extends TestCase
     /** @test */
     public function it_defers_a_usd_transfer_at_18_00()
     {
-        // NOTE: Mock BankClientRegistry for validation purposes
         $bankClientRegistryMock = Mockery::mock(BankClientRegistry::class);
         $bankClientRegistryMock->shouldReceive('getBankCodes')->andReturn(['A01', 'B02', 'C03']);
         $this->app->instance(BankClientRegistry::class, $bankClientRegistryMock);
@@ -152,7 +148,6 @@ class TransferTest extends TestCase
     /** @test */
     public function it_defers_a_transfer_outside_operational_hours_at_02_00()
     {
-        // NOTE: Mock BankClientRegistry for validation purposes
         $bankClientRegistryMock = Mockery::mock(BankClientRegistry::class);
         $bankClientRegistryMock->shouldReceive('getBankCodes')->andReturn(['A01', 'B02', 'C03']);
         $this->app->instance(BankClientRegistry::class, $bankClientRegistryMock);
