@@ -11,6 +11,7 @@
 
 ## Endpoint API
 
+- **`GET /api/banks`**:
 - **`POST /api/transfers/execute`**:
 - **`GET /api/transfers/schedule`**:
 - **`GET /api/transfers/{transferId}/status`**:
@@ -19,4 +20,10 @@
 
 ```
 php artisan test
+```
+
+## Demo API
+
+```
+https://apibank.khasbi.my.id/api
 ```
