@@ -15,33 +15,34 @@ RUN apk add --no-cache \
     icu-dev \
     libpng-dev \
     libjpeg-turbo-dev \
-    freetype-dev \
-    && docker-php-ext-install \
-    pdo_sqlite \
-    zip \
-    mbstring \
-    exif \
-    pcntl \
-    bcmath \
-    gd \
-    opcache \
-    intl \
-    pdo_mysql \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && rm -rf /var/cache/apk/*
+    freetype-dev
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+        pdo_sqlite \
+        zip \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        opcache \
+        intl \
+        pdo_mysql
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
-RUN git config --global --add safe.directory /var/www/html
 
-COPY . /var/www/html
+COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction \
+    --prefer-dist
 
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 9000
-
 CMD ["php-fpm"]
